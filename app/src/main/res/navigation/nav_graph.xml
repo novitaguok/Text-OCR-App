@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_camera">
+
+    <fragment
+        android:id="@+id/fragment_camera"
+        android:name="com.example.ocrapp.novita.presentation.fragment.CameraFragment"
+        android:label="CameraFragment">
+        <action
+            android:id="@+id/action_cameraFragment_to_displayResultFragment"
+            app:destination="@id/fragment_display_result" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_display_result"
+        android:name="com.example.ocrapp.novita.presentation.fragment.DisplayResultFragment"
+        android:label="DisplayResultFragment">
+        <argument
+            android:name="text"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+</navigation>
