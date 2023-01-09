@@ -65,6 +65,11 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             progressIndicator.show()
             takePicture()
         }
+        binding.btnGallery.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_cameraFragment_to_galleryFragment,
+            )
+        }
     }
 
     @Suppress("SameParameterValue")

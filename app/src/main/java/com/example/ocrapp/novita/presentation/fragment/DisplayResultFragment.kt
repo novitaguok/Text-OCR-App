@@ -20,7 +20,7 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
     private lateinit var binding: FragmentDisplayResultBinding
     private lateinit var progressIndicator: ProgressIndicator
     private val displayResultFragmentArgs: DisplayResultFragmentArgs by navArgs()
-    val db = FirebaseFirestore.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentDisplayResultBinding.bind(view)
@@ -38,11 +38,10 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
             } else {
                 progressIndicator = ProgressIndicator(requireContext(), false)
                 progressIndicator.show()
-                val result =
-                    hashMapOf("result" to ResultModel(title, displayResultFragmentArgs.toString()))
-                db.collection("ocr")
-                    .add(result)
-                    .addOnSuccessListener { documentReference ->
+                val result = ResultModel(title, displayResultFragmentArgs.text)
+                db.collection("ocr").document()
+                    .set(result)
+                    .addOnSuccessListener {
                         progressIndicator.dismiss()
                         Toast.makeText(
                             requireContext(),

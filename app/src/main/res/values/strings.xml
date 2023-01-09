@@ -3,5 +3,9 @@
     <string name="txt_result">Results shown here</string>
     <string name="txt_input_title">Title</string>
     <string name="txt_save">Save</string>
+    <string name="txt_title">Title</string>
+    <string name="txt_body">Body</string>
     <string name="desc_camera_button">Camera button</string>
+    <string name="desc_gallery_button">Gallery button</string>
+    <string name="desc_copy_button">Copy button</string>
 </resources>

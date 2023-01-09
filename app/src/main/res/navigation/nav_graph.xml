@@ -12,6 +12,10 @@
             android:id="@+id/action_cameraFragment_to_displayResultFragment"
             app:destination="@id/fragment_display_result"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_cameraFragment_to_galleryFragment"
+            app:destination="@id/fragment_gallery"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/fragment_display_result"
@@ -21,5 +25,10 @@
             android:name="text"
             android:defaultValue=""
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_gallery"
+        android:name="com.example.ocrapp.novita.presentation.fragment.GalleryFragment"
+        android:label="GalleryFragment">
     </fragment>
 </navigation>
