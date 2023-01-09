@@ -25,7 +25,6 @@ import com.example.ocrapp.novita.util.Constant.RATIO_16_9_VALUE
 import com.example.ocrapp.novita.util.Constant.RATIO_4_3_VALUE
 import com.example.ocrapp.novita.util.TextAnalyser
 import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.FirebaseFirestore
 import com.snatik.storage.Storage
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +51,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     private val executor by lazy { Executors.newSingleThreadExecutor() }
     private lateinit var progressIndicator: ProgressIndicator
     lateinit var binding: FragmentCameraBinding
-    val db = FirebaseFirestore.getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentCameraBinding.bind(view)
@@ -104,16 +102,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                             } else {
                                 progressIndicator.dismiss()
 
-                                val result = hashMapOf("results" to scanResult)
-                                db.collection("ocr")
-                                    .add(result)
-                                    .addOnSuccessListener { documentReference ->
-                                        Timber.d("DocumentSnapshot added with ID: ${documentReference.id}")
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Timber.w("Error adding document", e)
-                                    }
-
                                 findNavController().navigate(
                                     R.id.action_cameraFragment_to_displayResultFragment,
                                     Bundle().apply {
@@ -132,6 +120,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             })
     }
 
+    @Suppress("DEPRECATION")
     @SuppressLint("UnsafeExperimentalUsageError")
     private fun startCamera() {
         val metrics = DisplayMetrics().also { binding.viewCamera.display.getRealMetrics(it) }
