@@ -16,7 +16,6 @@ import com.example.ocrapp.novita.util.Constant.COLLECTION_NAME
 import com.example.ocrapp.novita.util.OnCopyClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class GalleryFragment : Fragment(R.layout.fragment_gallery), OnCopyClickListener {
 
     private lateinit var binding: FragmentGalleryBinding
