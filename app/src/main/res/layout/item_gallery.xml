@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp">
+    android:paddingHorizontal="@dimen/size_16">
 
     <TextView
         android:id="@+id/txt_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:textSize="16sp"
+        android:paddingTop="@dimen/size_16"
+        android:textSize="@dimen/text_16"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +22,10 @@
         android:id="@+id/txt_body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/size_4"
         android:ellipsize="end"
         android:maxLines="2"
-        android:paddingBottom="16dp"
+        android:paddingBottom="@dimen/size_16"
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txt_title"
@@ -33,7 +33,7 @@
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/size_1"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="40dp" />
+        app:layout_constraintGuide_end="@dimen/size_40" />
 
     <ImageButton
         android:id="@+id/btn_copy"
