@@ -13,6 +13,8 @@ import com.example.ocrapp.novita.databinding.FragmentGalleryBinding
 import com.example.ocrapp.novita.presentation.adapter.GalleryAdapter
 import com.example.ocrapp.novita.presentation.model.ResultModel
 import com.example.ocrapp.novita.util.Constant.COLLECTION_NAME
+import com.example.ocrapp.novita.util.Constant.DOC_BODY_FIELD_KEY
+import com.example.ocrapp.novita.util.Constant.DOC_TITLE_FIELD_KEY
 import com.example.ocrapp.novita.util.OnCopyClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -40,8 +42,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), OnCopyClickListener
         db.collection(COLLECTION_NAME).get().addOnCompleteListener {
             if (it.isSuccessful) {
                 for (document in it.result) {
-                    val title = document.data["title"].toString()
-                    val body = document.data["body"].toString()
+                    val title = document.data[DOC_TITLE_FIELD_KEY].toString()
+                    val body = document.data[DOC_BODY_FIELD_KEY].toString()
                     val result = ResultModel(title = title, body = body, id = document.id)
                     galleryList.add(result)
                 }
@@ -58,7 +60,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), OnCopyClickListener
         clipboard?.setPrimaryClip(clip)
         Toast.makeText(
             requireContext(),
-            "Copy to clipboard",
+            getString(R.string.all_txt_copy_to_clipboard),
             Toast.LENGTH_SHORT
         ).show()
     }

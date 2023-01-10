@@ -15,7 +15,6 @@ import com.example.ocrapp.novita.util.Constant.COLLECTION_NAME
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-
 class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
 
     private lateinit var binding: FragmentDisplayResultBinding

@@ -9,4 +9,6 @@ object Constant {
     const val ARG_KEY_TEXT = "text"
     const val FILE_DIR_CHILD = "OCR"
     const val COLLECTION_NAME = "ocr"
+    const val DOC_TITLE_FIELD_KEY = "title"
+    const val DOC_BODY_FIELD_KEY = "body"
 }
