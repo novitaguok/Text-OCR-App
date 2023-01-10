@@ -24,7 +24,6 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentDisplayResultBinding.bind(view)
-        binding.txtResult.append(displayResultFragmentArgs.text)
 
         var title = binding.inputTitle.editText?.text.toString()
         binding.inputTitle.editText?.doOnTextChanged { input, _, _, _ ->
@@ -32,8 +31,15 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
             binding.inputTitle.isErrorEnabled = false
         }
 
+        var body = binding.inputBody.editText?.text.toString()
+        binding.inputBody.editText?.setText(displayResultFragmentArgs.text)
+        binding.inputBody.editText?.doOnTextChanged { input, _, _, _ ->
+            body = input.toString()
+            binding.inputBody.isErrorEnabled = false
+        }
+
         binding.btnSave.setOnClickListener {
-            if (title.isBlank()) {
+            if (title.isBlank() || body.isBlank()) {
                 binding.inputTitle.error = "Required"
             } else {
                 progressIndicator = ProgressIndicator(requireContext(), false)

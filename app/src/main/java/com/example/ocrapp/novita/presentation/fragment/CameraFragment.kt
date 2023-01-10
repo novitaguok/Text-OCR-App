@@ -1,9 +1,13 @@
 package com.example.ocrapp.novita.presentation.fragment
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
@@ -26,12 +30,14 @@ import com.example.ocrapp.novita.util.Constant.RATIO_4_3_VALUE
 import com.example.ocrapp.novita.util.TextAnalyser
 import com.google.firebase.FirebaseApp
 import com.snatik.storage.Storage
+import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
@@ -51,6 +57,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     private val executor by lazy { Executors.newSingleThreadExecutor() }
     private lateinit var progressIndicator: ProgressIndicator
     lateinit var binding: FragmentCameraBinding
+    lateinit var bitmap: Bitmap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentCameraBinding.bind(view)
@@ -106,7 +113,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                                 ).show()
                             } else {
                                 progressIndicator.dismiss()
-
                                 findNavController().navigate(
                                     R.id.action_cameraFragment_to_displayResultFragment,
                                     Bundle().apply {
@@ -182,5 +188,19 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             .setTargetAspectRatio(screenAspectRatio)
             .setTargetRotation(rotation)
             .build()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                val resultUri = result.uri
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, resultUri)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }}
+        }
     }
 }
