@@ -24,35 +24,23 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentDisplayResultBinding.bind(view)
+        progressIndicator = ProgressIndicator(requireContext(), false)
 
-        val title = bindTitleValue()
-        val body = bindBodyValue()
-        bindSaveButton(title, body)
-    }
-
-    private fun bindTitleValue(): String {
         var title = binding.inputTitle.editText?.text.toString()
         binding.inputTitle.editText?.doOnTextChanged { input, _, _, _ ->
             title = input.toString()
             binding.inputTitle.isErrorEnabled = false
         }
-        return title
-    }
 
-    private fun bindBodyValue(): String {
         binding.inputBody.editText?.setText(displayResultFragmentArgs.text)
         var body = binding.inputBody.editText?.text.toString()
         binding.inputBody.editText?.doOnTextChanged { input, _, _, _ ->
             body = input.toString()
             binding.inputBody.isErrorEnabled = false
         }
-        return body
-    }
 
-    private fun bindSaveButton(title: String, body: String) {
         binding.btnSave.setOnClickListener {
             if (title.isNotBlank() && body.isNotBlank()) {
-                progressIndicator = ProgressIndicator(requireContext(), false)
                 progressIndicator.show()
                 val result = ResultModel(title, body)
                 db.collection(COLLECTION_NAME).document()
