@@ -31,20 +31,18 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
             binding.inputTitle.isErrorEnabled = false
         }
 
-        var body = binding.inputBody.editText?.text.toString()
         binding.inputBody.editText?.setText(displayResultFragmentArgs.text)
+        var body = binding.inputBody.editText?.text.toString()
         binding.inputBody.editText?.doOnTextChanged { input, _, _, _ ->
             body = input.toString()
             binding.inputBody.isErrorEnabled = false
         }
 
         binding.btnSave.setOnClickListener {
-            if (title.isBlank() || body.isBlank()) {
-                binding.inputTitle.error = "Required"
-            } else {
+            if (title.isNotBlank() && body.isNotBlank()) {
                 progressIndicator = ProgressIndicator(requireContext(), false)
                 progressIndicator.show()
-                val result = ResultModel(title, displayResultFragmentArgs.text)
+                val result = ResultModel(title, body)
                 db.collection("ocr").document()
                     .set(result)
                     .addOnSuccessListener {
@@ -54,11 +52,21 @@ class DisplayResultFragment : Fragment(R.layout.fragment_display_result) {
                             "Saved successfully!",
                             Toast.LENGTH_SHORT
                         ).show()
-                        findNavController().navigateUp()
+                        findNavController().apply {
+                            popBackStack()
+                            navigateUp()
+                        }
                     }
                     .addOnFailureListener { e ->
                         Timber.w("Error adding document", e)
                     }
+            } else {
+                if (title.isBlank()) {
+                    binding.inputTitle.error = "Required"
+                }
+                if (body.isBlank()) {
+                    binding.inputBody.error = "Required"
+                }
             }
         }
     }
