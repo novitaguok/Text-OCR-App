@@ -12,6 +12,7 @@ import com.example.ocrapp.novita.R
 import com.example.ocrapp.novita.databinding.FragmentGalleryBinding
 import com.example.ocrapp.novita.presentation.adapter.GalleryAdapter
 import com.example.ocrapp.novita.presentation.model.ResultModel
+import com.example.ocrapp.novita.util.Constant.COLLECTION_NAME
 import com.example.ocrapp.novita.util.OnCopyClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -37,7 +38,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery), OnCopyClickListener
 
     private fun initData() {
         val galleryList = mutableListOf<ResultModel>()
-        db.collection("ocr").get().addOnCompleteListener {
+        db.collection(COLLECTION_NAME).get().addOnCompleteListener {
             if (it.isSuccessful) {
                 for (document in it.result) {
                     val title = document.data["title"].toString()

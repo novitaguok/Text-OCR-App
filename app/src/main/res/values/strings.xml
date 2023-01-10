@@ -1,12 +1,23 @@
 <resources>
+    <!-- Common -->
     <string name="app_name">Text OCR</string>
-    <string name="txt_result">Results shown here</string>
-    <string name="txt_input_title">Title</string>
-    <string name="txt_save">Save</string>
-    <string name="txt_next">Next</string>
-    <string name="txt_title">Title</string>
-    <string name="txt_body">Body</string>
+    <string name="all_txt_save_success">Saved successfully!</string>
+    <string name="all_txt_error_add_document">Error adding document.</string>
+    <string name="all_txt_required">Required</string>
+    <string name="all_txt_title">Title</string>
+    <string name="all_txt_no_text_detected">No text detected</string>
+
+    <!-- Camera Fragment -->
     <string name="desc_camera_button">Camera button</string>
     <string name="desc_gallery_button">Gallery button</string>
+
+    <!-- Crop Image Fragment -->
+    <string name="txt_next">Next</string>
+
+    <!-- Display Result Fragment -->
+    <string name="txt_save">Save</string>
+
+    <!-- Gallery Fragment -->
+    <string name="txt_body">Body</string>
     <string name="desc_copy_button">Copy button</string>
 </resources>

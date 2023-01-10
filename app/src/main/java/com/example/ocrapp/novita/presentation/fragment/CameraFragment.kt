@@ -1,7 +1,6 @@
 package com.example.ocrapp.novita.presentation.fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -21,18 +20,20 @@ import androidx.navigation.fragment.findNavController
 import com.example.ocrapp.novita.R
 import com.example.ocrapp.novita.databinding.FragmentCameraBinding
 import com.example.ocrapp.novita.presentation.component.progress_indicator.ProgressIndicator
+import com.example.ocrapp.novita.util.CommonFunction.createFile
+import com.example.ocrapp.novita.util.CommonFunction.getOutputDirectory
+import com.example.ocrapp.novita.util.Constant.ARG_KEY_URI
+import com.example.ocrapp.novita.util.Constant.IMG_FILE_DATE_FORMAT
+import com.example.ocrapp.novita.util.Constant.IMG_FILE_EXT
 import com.example.ocrapp.novita.util.Constant.RATIO_16_9_VALUE
 import com.example.ocrapp.novita.util.Constant.RATIO_4_3_VALUE
 import com.example.ocrapp.novita.util.TextAnalyser
 import com.google.firebase.FirebaseApp
-import com.snatik.storage.Storage
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 import kotlin.math.abs
@@ -54,17 +55,32 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentCameraBinding.bind(view)
-
-        FirebaseApp.initializeApp(requireContext())
-
         progressIndicator = ProgressIndicator(requireContext(), false)
+
+        initFirebase()
+        bindCameraView()
+        bindCameraButton()
+        bindGalleryButton()
+    }
+
+    private fun initFirebase() {
+        FirebaseApp.initializeApp(requireContext())
+    }
+
+    private fun bindCameraView() {
         binding.viewCamera.post {
             startCamera()
         }
+    }
+
+    private fun bindCameraButton() {
         binding.btnCamera.setOnClickListener {
             progressIndicator.show()
             takePicture()
         }
+    }
+
+    private fun bindGalleryButton() {
         binding.btnGallery.setOnClickListener {
             findNavController().navigate(
                 R.id.action_cameraFragment_to_galleryFragment,
@@ -72,20 +88,11 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         }
     }
 
-    @Suppress("SameParameterValue")
-    private fun createFile(baseFolder: File, format: String, extension: String) =
-        File(
-            baseFolder,
-            SimpleDateFormat(format, Locale.US).format(System.currentTimeMillis()) + extension
-        )
-
     private fun takePicture() {
         val file = createFile(
-            getOutputDirectory(
-                requireContext()
-            ),
-            "yyyy-MM-dd-HH-mm-ss-SSS",
-            ".png"
+            getOutputDirectory(requireContext()),
+            IMG_FILE_DATE_FORMAT,
+            IMG_FILE_EXT
         )
         val outputFileOptions =
             ImageCapture.OutputFileOptions.Builder(file).build()
@@ -101,7 +108,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                                 progressIndicator.dismiss()
                                 Toast.makeText(
                                     requireContext(),
-                                    "No Text Detected",
+                                    getString(R.string.all_txt_no_text_detected),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
@@ -109,7 +116,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                                 findNavController().navigate(
                                     R.id.action_cameraFragment_to_cropImageFragment,
                                     Bundle().apply {
-                                        putString("uri", Uri.fromFile(file).toString())
+                                        putString(ARG_KEY_URI, Uri.fromFile(file).toString())
                                     }
                                 )
                             }
@@ -121,7 +128,8 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                     progressIndicator.dismiss()
                     Timber.e(exception.localizedMessage!!)
                 }
-            })
+            }
+        )
     }
 
     @Suppress("DEPRECATION")
@@ -154,15 +162,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private fun getOutputDirectory(context: Context): File {
-        val storage = Storage(context)
-        val mediaDir = storage.internalCacheDirectory?.let {
-            File(it, "OCR").apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists()) mediaDir else context.filesDir
-    }
-
-
     private fun aspectRatio(width: Int, height: Int): Int {
         val previewRatio = max(width, height).toDouble() / min(width, height)
         if (abs(previewRatio - RATIO_4_3_VALUE) <= abs(previewRatio - RATIO_16_9_VALUE)) {
@@ -170,7 +169,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         }
         return AspectRatio.RATIO_16_9
     }
-
 
     private fun initializeImageCapture(
         screenAspectRatio: Int,
@@ -182,22 +180,4 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             .setTargetRotation(rotation)
             .build()
     }
-
-//    @Deprecated("Deprecated in Java")
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-//            val result = CropImage.getActivityResult(data)
-//            if (resultCode == RESULT_OK) {
-//                val resultUri = result.uri
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(
-//                        requireActivity().contentResolver,
-//                        resultUri
-//                    )
-//                } catch (e: IOException) {
-//                    e.printStackTrace()
-//                }
-//            }
-//        }
-//    }
 }

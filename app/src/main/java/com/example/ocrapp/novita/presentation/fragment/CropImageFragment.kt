@@ -1,6 +1,5 @@
 package com.example.ocrapp.novita.presentation.fragment
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -14,15 +13,17 @@ import androidx.navigation.fragment.navArgs
 import com.example.ocrapp.novita.R
 import com.example.ocrapp.novita.databinding.FragmentCropImageBinding
 import com.example.ocrapp.novita.presentation.component.progress_indicator.ProgressIndicator
+import com.example.ocrapp.novita.util.CommonFunction.createFile
+import com.example.ocrapp.novita.util.CommonFunction.getOutputDirectory
+import com.example.ocrapp.novita.util.Constant.ARG_KEY_TEXT
+import com.example.ocrapp.novita.util.Constant.IMG_FILE_DATE_FORMAT
+import com.example.ocrapp.novita.util.Constant.IMG_FILE_EXT
 import com.example.ocrapp.novita.util.TextAnalyser
-import com.snatik.storage.Storage
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 
 class CropImageFragment : Fragment(R.layout.fragment_crop_image) {
@@ -55,8 +56,8 @@ class CropImageFragment : Fragment(R.layout.fragment_crop_image) {
         val img = binding.cropImageView.croppedImage
         val file = createFile(
             getOutputDirectory(requireContext()),
-            "yyyy-MM-dd-HH-mm-ss-SSS",
-            ".png"
+            IMG_FILE_DATE_FORMAT,
+            IMG_FILE_EXT
         )
 
         FileOutputStream(file).use { out ->
@@ -68,7 +69,7 @@ class CropImageFragment : Fragment(R.layout.fragment_crop_image) {
                     progressIndicator.dismiss()
                     Toast.makeText(
                         requireContext(),
-                        "No Text Detected",
+                        getString(R.string.all_txt_no_text_detected),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -76,26 +77,11 @@ class CropImageFragment : Fragment(R.layout.fragment_crop_image) {
                     findNavController().navigate(
                         R.id.action_cameraFragment_to_displayResultFragment,
                         Bundle().apply {
-                            putString("text", scanResult)
+                            putString(ARG_KEY_TEXT, scanResult)
                         }
                     )
                 }
             }, requireContext(), Uri.fromFile(file)).analyseImage()
         }
-    }
-
-    @Suppress("SameParameterValue")
-    private fun createFile(baseFolder: File, format: String, extension: String) =
-        File(
-            baseFolder,
-            SimpleDateFormat(format, Locale.US).format(System.currentTimeMillis()) + extension
-        )
-
-    private fun getOutputDirectory(context: Context): File {
-        val storage = Storage(context)
-        val mediaDir = storage.internalCacheDirectory?.let {
-            File(it, "OCR").apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists()) mediaDir else context.filesDir
     }
 }

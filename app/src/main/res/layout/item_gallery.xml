@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/txt_title" />
+        tools:text="@string/all_txt_title" />
 
     <TextView
         android:id="@+id/txt_body"
