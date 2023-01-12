@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "281929104080",
+    "project_id": "ocr-text-app",
+    "storage_bucket": "ocr-text-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281929104080:android:c1f9730e23f5d4daecbcd5",
+        "android_client_info": {
+          "package_name": "com.example.ocrapp.novita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281929104080-uq10d9d3hu3u2ffgmj65u02m2bcc2rk7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYM4f8G4OHB25wxisgTK2905OYhI5gL2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281929104080-uq10d9d3hu3u2ffgmj65u02m2bcc2rk7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
